@@ -68,11 +68,12 @@ Features are designed to expose **latent inconsistencies** across spatial, tempo
 
 ## 🧪 Training Strategy
 
+- Given the absence of ground-truth labels, we adopted a pseudo-label self-training strategy. Phase 3 used unsupervised anomaly detection (Isolation Forest) to generate initial labels. Phase 4 trained a supervised XGBoost classifier on these pseudo-labels with an 80/20 train-validation split. The classification threshold was tuned on the validation split to maximize weighted F1. Feature engineering focused on temporal dynamics and cross-channel inconsistencies motivated by physical spoofing signatures.
 - Removed inactive channels  
 - Standardized features  
 - Used pseudo-labeling  
 - Handled imbalance via `scale_pos_weight`  
-- Optimized threshold using Weighted F1  
+- Optimized threshold using Weighted F1
 
 ---
 
@@ -173,6 +174,104 @@ submission.csv
 
 Your pipeline should now be fully reproducible and compliant with the
 requirements.
+
+## 📊 Visual Analysis & Insights
+
+### 1. GNSS Signal Timeline (Spoofed Regions Highlighted)
+![GNSS Timeline](plots/viz1_timeseries_overview.png)
+
+This plot shows how GNSS signals evolve over time.  
+Red shaded regions indicate **spoofed intervals**, where:
+- Doppler spread becomes unstable or collapses  
+- Pseudorange spread shows abnormal patterns  
+- Active satellite channels drop sharply  
+
+👉 Key takeaway: Spoofing introduces **temporal inconsistencies and sudden disruptions**.
+
+---
+
+### 2. Feature Distributions: Normal vs Spoofed
+![Feature Distributions](plots/viz2_feature_distributions.png)
+
+Distribution comparison of key features:
+- Doppler standard deviation  
+- Pseudorange variation  
+- Active channels  
+- CN0 coefficient of variation  
+
+👉 Key takeaway: Spoofed signals tend to have:
+- Lower diversity  
+- More concentrated distributions  
+- Less natural variation  
+
+---
+
+### 3. Doppler vs Pseudorange Spread (Key Signature)
+![Scatter Plot](plots/viz3_scatter_doppler_pseudorange.png)
+
+Scatter plot showing relationship between Doppler spread and pseudorange spread.
+
+👉 Observations:
+- Normal signals are **well spread across space**  
+- Spoofed signals cluster near **low spread regions**  
+
+👉 Key takeaway: Low spread across channels is a strong indicator of spoofing.
+
+---
+
+### 4. Feature Correlation Heatmap
+![Correlation Heatmap](plots/viz4_correlation_heatmap.png)
+
+Shows correlation between engineered features and spoofing label.
+
+👉 Key insights:
+- Strong relationships between physical features  
+- Certain features (e.g., active channels, spread metrics) correlate with spoofing  
+
+👉 Helps validate feature engineering choices.
+
+---
+
+### 5. Isolation Forest Anomaly Scores
+![Anomaly Scores](plots/viz5_anomaly_score_distribution.png)
+
+Distribution of anomaly scores from Isolation Forest.
+
+👉 Observations:
+- Clear separation between normal and spoofed regions  
+- Threshold effectively splits the two classes  
+
+👉 Key takeaway: Unsupervised anomaly detection is effective for this problem.
+
+---
+
+### 6. Active Satellite Channels Analysis
+![Active Channels](plots/viz6_active_channels.png)
+
+Bar chart comparing number of active channels in normal vs spoofed cases.
+
+👉 Key insight:
+- Spoofed timestamps have **significantly fewer active satellites**  
+
+👉 This is one of the strongest detection signals.
+
+---
+
+### 7. Model Pipeline Architecture
+![Pipeline](plots/viz7_pipeline_architecture.png)
+
+Overview of the full detection pipeline:
+
+1. Raw GNSS data  
+2. Feature engineering  
+3. Isolation Forest (anomaly detection)  
+4. Train-validation split  
+5. XGBoost classifier  
+6. Final submission  
+
+👉 Key takeaway: The system combines **unsupervised + supervised learning** for robust detection.
+
+---
 
 
 ## 🎯 Final Insight
