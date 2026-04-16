@@ -279,3 +279,18 @@ Overview of the full detection pipeline:
 This system detects spoofing by identifying:
 
 > Violations in spatial diversity, temporal continuity, and physical consistency
+
+---
+
+## 👩‍💻 Authors
+
+Developed by a team of undergraduate students from **IIT Roorkee**
+- **Aditi Joshi**  
+- **Naisha Rajput**  
+- **Aakriti Bansal**  
+- **Keerti Gola**  
+
+🏫 *Indian Institute of Technology Roorkee*  
+📅 *2nd Year*
+
+---
