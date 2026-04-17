@@ -282,15 +282,4 @@ This system detects spoofing by identifying:
 
 ---
 
-## 👩‍💻 Authors
 
-Developed by a team of undergraduate students from **IIT Roorkee**
-- **Aditi Joshi**  
-- **Naisha Rajput**  
-- **Aakriti Bansal**  
-- **Keerti Gola**  
-
-🏫 *Indian Institute of Technology Roorkee*  
-📅 *2nd Year*
-
----
